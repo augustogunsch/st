@@ -59,6 +59,7 @@ static void zoom(const Arg *);
 static void zoomabs(const Arg *);
 static void zoomreset(const Arg *);
 static void ttysend(const Arg *);
+static void chalpha(const Arg *);
 
 /* config.h for applying patches and the configuration. */
 #include "config.h"
@@ -779,6 +780,16 @@ xloadcolor(int i, const char *name, Color *ncolor)
 }
 
 void
+updalpha()
+{
+	if (opt_alpha)
+		alpha = strtof(opt_alpha, NULL);
+	dc.col[defaultbg].color.alpha = (unsigned short)(0xffff * alpha);
+	dc.col[defaultbg].pixel &= 0x00FFFFFF;
+	dc.col[defaultbg].pixel |= (unsigned char)(0xff * alpha) << 24;
+}
+
+void
 xloadcols(void)
 {
 	int i;
@@ -802,11 +813,7 @@ xloadcols(void)
 		}
 
 	/* set alpha value of bg color */
-	if (opt_alpha)
-		alpha = strtof(opt_alpha, NULL);
-	dc.col[defaultbg].color.alpha = (unsigned short)(0xffff * alpha);
-	dc.col[defaultbg].pixel &= 0x00FFFFFF;
-	dc.col[defaultbg].pixel |= (unsigned char)(0xff * alpha) << 24;
+	updalpha();
 	loaded = 1;
 }
 
@@ -887,6 +894,26 @@ xgeommasktogravity(int mask)
 	}
 
 	return SouthEastGravity;
+}
+
+void
+chalpha(const Arg *arg)
+{
+	float valpha = alpha + arg->f;
+	if (valpha > 1.0) 
+	{
+		alpha = 1.0;
+	}
+	else if (valpha < 0.0)
+	{
+		alpha = 0.0;
+	}
+	else
+	{
+		alpha = valpha;
+	}
+	updalpha();
+	redraw();
 }
 
 int

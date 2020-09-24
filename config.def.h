@@ -1,5 +1,3 @@
-/* See LICENSE file for copyright and license details. */
-
 /*
  * appearance
  *
@@ -100,7 +98,7 @@ char *termname = "xterm-256color";
 unsigned int tabspaces = 8;
 
 /* bg opacity */
-float alpha = 1;
+float alpha = 0.7;
 
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
@@ -197,6 +195,8 @@ static MouseShortcut mshortcuts[] = {
 
 static Shortcut shortcuts[] = {
 	/* mask                 keysym          function        argument */
+	{ TERMMOD,		XK_O,		chalpha,	{.f =  0.1} },
+	{ TERMMOD,		XK_I,		chalpha,	{.f =  -0.1} },
 	{ XK_ANY_MOD,           XK_Break,       sendbreak,      {.i =  0} },
 	{ ControlMask,          XK_Print,       toggleprinter,  {.i =  0} },
 	{ ShiftMask,            XK_Print,       printscreen,    {.i =  0} },
