@@ -731,6 +731,7 @@ cresize(int width, int height)
 	tresize(col, row);
 	xresize(col, row);
 	ttyresize(win.tw, win.th);
+	xclear(0, 0, win.w, win.h);
 }
 
 void
